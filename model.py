@@ -11,7 +11,19 @@ class User(db.Document):
 	email = db.StringField()
 	password = db.StringField()
 	phone_number = db.StringField()
+	refresh = db.StringField()
 
+	def get_oauth(self):
+		body = {
+		"refresh_token":"refresh_Y5beJdBLtgvply3KIzrh72UxWMEqiTNoVAfDs98G",
+		"scope":[
+		    "USER|PATCH",
+		    "USER|GET",
+		    ...
+			]
+		}
+
+		return user.oauth(body)
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

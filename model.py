@@ -1,9 +1,14 @@
 from flask import Flask
-from flask_mongoalchemy import MongoAlchemy
+from flask_mongoalchemy import MongoAlchemy, BaseQuery
 from server import app 
 
 app.config['MONGOALCHEMY_DATABASE'] = 'easypay'
 db = MongoAlchemy(app)
+
+class MyCustomizedQuery(BaseQuery):
+
+    def get_user(self,username):
+        return self.filter(self.type.username == username)
 
 class User(db.Document):
 	name = db.StringField()
@@ -12,23 +17,10 @@ class User(db.Document):
 	password = db.StringField()
 	phone_number = db.StringField()
 	refresh = db.StringField()
-
-	def get_oauth(self):
-		body = {
-		"refresh_token":"refresh_Y5beJdBLtgvply3KIzrh72UxWMEqiTNoVAfDs98G",
-		"scope":[
-		    "USER|PATCH",
-		    "USER|GET",
-		    ...
-			]
-		}
-
-		return user.oauth(body)
+	query_class = MyCustomizedQuery
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
-
-    # Configure to use our PstgreSQL database
    
     db.app = app
     db.init_app(app)

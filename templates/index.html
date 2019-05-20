@@ -4,12 +4,19 @@
 	<title>Homepage</title>
 </head>
 <body>
+	
 	<form action='/register' method="POST">
 		<span>Account Login</span><br>
 		Fullname:<input type="name" name="name"><br>
 		Email:<input type="email" name="email"><br>
 		PhoneNumber:<input type="phone_number" name="phone_number"><br>
 		password:<input type="password" name="password">
+		<button>Submit</button>
+	</form>
+	<form action="/login" method="POST">
+		<span>Login</span>
+		<input type="email" name="email">
+		<input type="password" name="password">
 		<button>Submit</button>
 	</form>
 

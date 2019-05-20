@@ -23,12 +23,12 @@ client = Client(
 
 # client = Client(env)
 
-
+#"e7261db4f6f1751399bbbf5f01401866"
 def createUser(email,phone_number,name):
 	print(dir(client))
 	print(client.client_id, client.client_secret)
 	ip = "98.210.168.175"
-	fingerprint = "e7261db4f6f1751399bbbf5f01401866"
+	fingerprint = "static_pin"
 	body = {
   	"logins": [
     {
@@ -48,17 +48,49 @@ def createUser(email,phone_number,name):
 	refresh = new_user.refresh()
 	return new_user, new_user.id, refresh
 
-def get_oauth(user):
+def get_oauth(user,refresh):
 
 	body = {
-		"refresh_token":"refresh_Y5beJdBLtgvply3KIzrh72UxWMEqiTNoVAfDs98G",
+		"refresh_token": refresh,
 		 "validation_pin":"123456",
 		"scope":[
 		"USER|PATCH",
 		"USER|GET",
+		"NODES|GET",
+		"NODES|POST",
+
 		]
 	}
 
 	oauth = user.oauth(body)
 	print(oauth)
 	return oauth
+
+def issue_public_key():
+	scope = [
+	  "USERS|POST",
+	  "USER|PATCH",
+	  "NODES|POST",
+	]
+	pubkey = client.issue_public_key(scope)
+	return pubkey
+
+def create_url(oauth_key, pubkey):
+	 "https://uat-uiaas.synapsefi.com/link?oauth_key={}&public_key=&success_uri=SUCCESS&failure_uri=FAILURE".format(OAUTH_KEY,PUBLIC_KEY,)
+
+def post_credentials(user):
+	body = {
+	  "type": "ACH-US",
+	  "info":{
+	    "bank_id":"synapse_good",
+	    "bank_pw":"test1234",
+	    "bank_name":"fake"
+	  }
+	}
+	# user = session.get("user")
+	user.create_node(body)
+
+def get_user(user_id):
+
+	user = client.get_user(user_id, full_dehydrate=True)
+	return user

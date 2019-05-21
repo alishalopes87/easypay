@@ -47,7 +47,7 @@ def login_process():
     #dont store passwords
 
     user = User.query.filter(User.email==email).first()
-    print(dir(user.mongo_id))
+    
     if not user:
         flash("No such user")
         return redirect("/register")
@@ -95,7 +95,7 @@ def post_transaction():
 	user = get_user(user_id)
 	node_id = post_credentials(user)
 	# node_id = user.get_node()
-	transaction = create_transaction(user)
+	transaction = create_transaction(node_id,user_id)
 
 	response = verify_mfa(user)
 

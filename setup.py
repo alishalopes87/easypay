@@ -96,7 +96,7 @@ def get_user(user_id):
 	return user
 # 594e606212e17a002f2e3251
 # 5ce0cf99c9f52d006691eda3
-def create_transaction(user):
+def create_transaction(node_id,user_id):
 	# node_id = '594e606212e17a002f2e3251'
 	body = {
 	  "to": {
@@ -112,7 +112,8 @@ def create_transaction(user):
 	  }
 	}
 
-	return user.create_trans(body)
+	user = get_user(user_id)
+	return user.create_trans(node_id,body)
 def verifyMFA(user):
 
 	body = {

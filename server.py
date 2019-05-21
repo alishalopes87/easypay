@@ -1,7 +1,7 @@
 import os
 from synapsepy import Client
 from flask import (Flask, render_template, redirect, request, flash, session,jsonify, abort)
-from setup import createUser, client, get_oauth, issue_public_key, get_user, post_credentials
+from setup import createUser, client, get_oauth,create_transaction, issue_public_key, get_user, post_credentials
 from model import *
 app = Flask(__name__)
 
@@ -32,6 +32,7 @@ def register_process():
 				phone_number=phone_number
 				)
 	user.save()
+	print("this is synapsepy",dir(new_user), "this is mine", dir(user))
 	# session["user"] = user
 	return render_template('success.html', user=user)
 
@@ -74,11 +75,39 @@ def submit_bank():
 	user_id = session.get("user_id")
 	user = get_user(user_id)
 
-	credentials = post_credentials(user)
+	node_id = post_credentials(user)
+	user.node_id = node_id
+	# user.save()
+	#need credentials for node
 
-	print(credentials)
+	print("this is the node",node_id)
 
 	return render_template("bank.html")
+
+@app.route('/create-transaction')
+def initiate_trans():
+
+	return render_template('transaction.html')
+
+@app.route('/transaction',methods=["POST","GET"])
+def post_transaction():
+	user_id = session.get("user_id")
+	user = get_user(user_id)
+	node_id = post_credentials(user)
+	# node_id = user.get_node()
+	transaction = create_transaction(user)
+
+	response = verify_mfa(user)
+
+	print(response)
+
+	return redirect('/bank-success')
+
+# @app.route('/mfa',methods=["POST"])
+# def verify_mfa():
+# 	user_id = session.get("user_id")
+# 	user = get_user(user_id)
+# 	return 
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

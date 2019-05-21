@@ -88,9 +88,37 @@ def post_credentials(user):
 	  }
 	}
 	# user = session.get("user")
-	user.create_node(body)
+	return user.create_node(body)
 
 def get_user(user_id):
 
 	user = client.get_user(user_id, full_dehydrate=True)
 	return user
+# 594e606212e17a002f2e3251
+# 5ce0cf99c9f52d006691eda3
+def create_transaction(user):
+	# node_id = '594e606212e17a002f2e3251'
+	body = {
+	  "to": {
+	    "type": "ACH-US",
+	    "id": "594e6e6c12e17a002f2e39e4"
+	  },
+	  "amount": {
+	    "amount": 20.1,
+	    "currency": "USD"
+	  },
+	  "extra": {
+	    "ip": "192.168.0.1"
+	  }
+	}
+
+	return user.create_trans(body)
+def verifyMFA(user):
+
+	body = {
+    "access_token":"fake_cd60680b9addc013ca7fb25b2b704ba82d3",
+    "mfa_answer":"test_answer"
+	}
+
+	return user.ach_mfa(body)
+
